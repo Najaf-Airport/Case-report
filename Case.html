@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقرير حالة بتنسيق النموذج الورقي</title>
+    <style>
+        /* التنسيقات الأساسية والمتجاوبة للجوال */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 10px;
+            font-size: 11pt;
+            line-height: 1.5;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            max-width: 21cm;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ccc;
+        }
+
+        /* رأس التقرير */
+        .header-info {
+            text-align: right;
+            margin-bottom: 20px;
+            font-size: 10pt;
+            line-height: 1.2;
+        }
+        .center-title {
+            text-align: center;
+            font-size: 14pt;
+            font-weight: bold;
+            margin: 10px 0 25px 0;
+            padding-bottom: 5px;
+        }
+        .receiver {
+            font-weight: bold;
+            text-align: right;
+            margin-bottom: 20px;
+            font-size: 11pt;
+        }
+
+        /* تنسيق الأقسام الفردية (كما في الصورة) */
+        .report-section {
+            border: 1px solid #000; /* إطار حول كل قسم */
+            padding: 5px;
+            margin-bottom: 30px;
+        }
+
+        /* صف الحقول الرئيسية (مثل مدة التأخير والمنسق) */
+        .main-fields-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #000;
+        }
+        
+        .field-group {
+            display: flex;
+            align-items: center;
+            /* توزيع العرض */
+            width: 48%; 
+            font-weight: bold;
+        }
+        
+        .field-group label {
+            white-space: nowrap;
+            margin-left: 5px;
+        }
+
+        .field-group input {
+            flex-grow: 1;
+            padding: 2px;
+            border: none;
+            border-bottom: 1px solid #000; /* خط تحت الإدخال */
+            text-align: right;
+            font-size: 11pt;
+            background-color: transparent;
+        }
+        
+        /* الجدول الداخلي لبيانات الرحلة وشرح الحالة */
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .detail-table th, .detail-table td {
+            border: 1px solid #000;
+            padding: 0;
+            text-align: right;
+            vertical-align: top;
+        }
+        
+        /* رؤوس الجدول (رقم الرحلة، التاريخ، الوقت) */
+        .detail-table th {
+            font-weight: bold;
+            background-color: #f7f7f7;
+            padding: 5px;
+            text-align: center;
+        }
+
+        /* تنسيق الحقول الداخلية في الجدول */
+        .detail-table input, .detail-table textarea {
+            width: 100%;
+            border: none;
+            padding: 5px;
+            text-align: right;
+            box-sizing: border-box;
+            font-size: 11pt;
+            background-color: transparent;
+            resize: none;
+        }
+        
+        .explanation-cell {
+            padding: 0;
+        }
+        
+        .explanation-cell label {
+            display: block;
+            font-weight: bold;
+            padding: 5px;
+            border-bottom: 1px solid #000;
+        }
+        
+        .explanation-cell textarea {
+            min-height: 120px; /* لضمان وضوح مساحة الكتابة */
+            resize: vertical;
+        }
+
+        /* التوقيع */
+        .signature {
+            margin-top: 40px;
+            text-align: right;
+            padding-right: 10px;
+            line-height: 1.2;
+            font-size: 10pt;
+        }
+
+        /* ------------------------------------------- */
+        /* تنسيقات الطباعة (A4) */
+        /* ------------------------------------------- */
+        @media print {
+            body {
+                width: 21cm;
+                height: 29.7cm;
+                margin: 0;
+                padding: 0;
+                background-color: #fff;
+                border: none;
+            }
+            .container {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 30px;
+                box-shadow: none;
+                border: none;
+            }
+            .buttons {
+                display: none;
+            }
+            /* لضمان توسع الشرح عند الطباعة */
+            .explanation-cell textarea {
+                min-height: 150px; 
+                resize: none;
+                overflow: hidden;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-info">
+            <div>**مطار النجف الأشرف الدولي**</div>
+            <div>عمليات ساحة الطيران</div>
+            <div>شعبة تنسيق الطائرات</div>
+        </div>
+    
+        <div class="center-title">
+            م / تقرير حالة
+        </div>
+    
+        <div class="receiver">
+            إلى السيد مدير العمليات الأرضية المحترم
+        </div>
+    
+        <form id="reportForm">
+            
+            <div class="report-section" id="section1">
+                <div class="main-fields-row">
+                    <div class="field-group" style="width: 50%;">
+                        <label>1. مدة التأخير:</label>
+                        <input type="number" id="delay1-duration" placeholder="دقيقة">
+                    </div>
+                    <div class="field-group" style="width: 45%;">
+                        <label>اسم المنسق:</label>
+                        <input type="text" id="coordinator1-name" placeholder="...">
+                    </div>
+                </div>
+
+                <table class="detail-table">
+                    <tbody>
+                        <tr>
+                            <td style="width: 50%;">
+                                <div style="display: flex; flex-direction: column;">
+                                    <div style="font-weight: bold; border-bottom: 1px solid #000; padding: 5px; text-align: center;">رقم الرحلة</div>
+                                    <div style="font-weight: bold; border-bottom: 1px solid #000; padding: 5px; text-align: center;">الخطوط</div>
+                                    <div class="explanation-cell" style="border: none;">
+                                        <label>شرح الحالة :</label>
+                                        <textarea id="explanation1" rows="4" placeholder="..." required></textarea>
+                                    </div>
+                                </div>
+                            </td>
+                            
+                            <td style="width: 50%;">
+                                <div style="display: flex; flex-direction: column;">
+                                    <div style="font-weight: bold; border-bottom: 1px solid #000; padding: 5px; text-align: center;">التاريخ</div>
+                                    <div style="font-weight: bold; border-bottom: 1px solid #000; padding: 5px; text-align: center;">الوقت</div>
+                                    <div style="padding: 5px;"><input type="text" id="flight1-num" placeholder="رقم الرحلة"></div>
+                                    <div style="padding: 5px; border-bottom: 1px solid #000;"><input type="text" id="date1" placeholder="التاريخ"></div>
+                                    <div style="padding: 5px;"><input type="text" id="time1" placeholder="الوقت"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="report-section" id="section2">
+                <div class="main-fields-row">
+                    <div class="field-group" style="width: 50%;">
+                        <label>2. مدة التأخير:</label>
+                        <input type="number" id="delay2-duration" placeholder="دقيقة">
+                    </div>
+                    <div class="field-group" style="width: 45%;">
+                        <label>اسم المنسق:</label>
+                        <input type="text" id="coordinator2-name" placeholder="...">
+                    </div>
+                </div>
+
+                <table class="detail-table">
+                    <tbody>
+                        <tr>
+                            <td style="width: 50%;">
+                                <div style="display: flex; flex-direction: column;">
+                                    <div style="font-weight: bold; border-bottom: 1px solid #000; padding: 5px; text-align: center;">رقم الرحلة</div>
+                                    <div style="font-weight: bold; border-bottom: 1px solid #000; padding: 5px; text-align: center;">الخطوط</div>
+                                    <div class="explanation-cell" style="border: none;">
+                                        <label>شرح الحالة :</label>
+                                        <textarea id="explanation2" rows="4" placeholder="..." required></textarea>
+                                    </div>
+                                </div>
+                            </td>
+                            
+                            <td style="width: 50%;">
+                                <div style="display: flex; flex-direction: column;">
+                                    <div style="font-weight: bold; border-bottom: 1px solid #000; padding: 5px; text-align: center;">التاريخ</div>
+                                    <div style="font-weight: bold; border-bottom: 1px solid #000; padding: 5px; text-align: center;">الوقت</div>
+                                    <div style="padding: 5px;"><input type="text" id="flight2-num" placeholder="رقم الرحلة"></div>
+                                    <div style="padding: 5px; border-bottom: 1px solid #000;"><input type="text" id="date2" placeholder="التاريخ"></div>
+                                    <div style="padding: 5px;"><input type="text" id="time2" placeholder="الوقت"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </form>
+    
+        <div class="signature">
+            <p>**أحمد عبد العالي كاظم**</p>
+            <p>**مسؤول شعبة تنسيق الطائرات**</p>
+        </div>
+    
+        <div class="buttons" style="text-align: center; margin-top: 30px;">
+            <button onclick="printToPDF()" style="padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px;">حفظ التقرير كـ PDF (حجم A4)</button>
+        </div>
+    </div>
+
+    <script>
+        // وظيفة طباعة الصفحة التي تسمح بالحفظ كـ PDF
+        function printToPDF() {
+            window.print();
+        }
+        
+        // **وظائف التخزين المحلي (Local Storage) للحفظ التلقائي للمسودة:**
+        const fieldsToSave = [
+            'delay1-duration', 'coordinator1-name', 'flight1-num', 'date1', 'time1', 'explanation1',
+            'delay2-duration', 'coordinator2-name', 'flight2-num', 'date2', 'time2', 'explanation2'
+        ];
+
+        function saveDraft() {
+            const data = {};
+            fieldsToSave.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    data[id] = element.value;
+                }
+            });
+            localStorage.setItem('reportDraft', JSON.stringify(data));
+        }
+
+        function loadDraft() {
+            const draft = localStorage.getItem('reportDraft');
+            if (draft) {
+                const data = JSON.parse(draft);
+                fieldsToSave.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element && data[id] !== undefined) {
+                        element.value = data[id];
+                    }
+                });
+            }
+        }
+        
+        window.onload = loadDraft; 
+
+        document.getElementById('reportForm').addEventListener('input', () => {
+            clearTimeout(window.saveTimer);
+            window.saveTimer = setTimeout(saveDraft, 5000); 
+        });
+
+    </script>
+</body>
+</html>
